@@ -1,13 +1,13 @@
+import "reflect-metadata";
 import express from "express";
+import "express-async-errors";
+
+import { router } from "./routes";
+import './database';
 
 const app = express();
 
-app.get('/test', (request, response) => {
-    return response.send("Olá NLW.");
-});
+app.use(express.json());
+app.use(router);
 
-app.post('/test-post', (request, response) => {
-    return response.send("Olá NLW. Método POST.");
-});
-
-app.listen(3000, () => console.log("Server is running."));
+app.listen(3000, () => console.log('Server is running.'));
