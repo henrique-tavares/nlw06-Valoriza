@@ -15,11 +15,11 @@ export class CreateUserService {
 
     const userRepository = getCustomRepository(UserRepository);
 
-    const existentUser = await userRepository.findOne({
+    const alreadyExistentUser = await userRepository.findOne({
       email
     });
 
-    if (existentUser) {
+    if (alreadyExistentUser) {
       throw new Error("User already exists");
     }
 
@@ -29,7 +29,7 @@ export class CreateUserService {
       admin
     });
 
-    userRepository.save(user);
+    await userRepository.save(user);
 
     return user;
   }
