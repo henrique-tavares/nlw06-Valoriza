@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { getCustomRepository } from "typeorm";
+import { AppError } from "../entities/AppError";
 import { UserRepository } from "../repositories/UserRepository";
 
 export async function ensureAdmin(request: Request, response: Response, next: NextFunction) {
@@ -10,7 +11,7 @@ export async function ensureAdmin(request: Request, response: Response, next: Ne
   const user = await userRepository.findOne(userId);
 
   if (!user) {
-    throw new Error("User is not valid anymore");
+    throw new AppError("User does not exist anymore", 404);
   }
 
   const { admin } = user;

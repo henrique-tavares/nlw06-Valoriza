@@ -1,11 +1,12 @@
 import { getCustomRepository } from "typeorm";
+import { AppError } from "../entities/AppError";
 import { TagRepository } from "../repositories/TagRepository";
 
 export class CreateTagService {
   async execute(name: string) {
 
     if (!name) {
-      throw new Error("Name is missing");
+      throw new AppError("Name is missing", 404);
     }
 
     const tagRepository = getCustomRepository(TagRepository);
@@ -15,7 +16,7 @@ export class CreateTagService {
     });
 
     if (alreadyExistentTag) {
-      throw new Error("Tag already exists");
+      throw new AppError("Tag already exists", 400);
     }
 
     const tag = tagRepository.create({

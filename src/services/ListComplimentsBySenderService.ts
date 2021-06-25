@@ -1,5 +1,6 @@
 import { getCustomRepository } from "typeorm";
 import { ComplimentRepository } from "../repositories/ComplimentRepository";
+import { classToPlain } from "class-transformer";
 
 export class ListComplimentsBySenderService {
   async execute(sender: string) {
@@ -12,6 +13,6 @@ export class ListComplimentsBySenderService {
       }
     });
 
-    return compliments;
+    return classToPlain(compliments);
   }
 }

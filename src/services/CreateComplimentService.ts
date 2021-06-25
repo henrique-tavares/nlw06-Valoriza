@@ -1,4 +1,5 @@
 import { getCustomRepository } from "typeorm";
+import { AppError } from "../entities/AppError";
 import { ComplimentRepository } from "../repositories/ComplimentRepository";
 import { TagRepository } from "../repositories/TagRepository";
 import { UserRepository } from "../repositories/UserRepository";
@@ -17,20 +18,20 @@ export class CreateComplimentService {
     const tagRepository = getCustomRepository(TagRepository);
 
     if (user_sender === user_receiver) {
-      throw new Error("Sender and receiver cannot be the same");
+      throw new AppError("Sender and receiver cannot be the same", 400);
     }
 
     const userSender = await userRepository.findOne(user_sender);
     const userReceiver = await userRepository.findOne(user_receiver);
 
     if (!userSender || !userReceiver) {
-      throw new Error("Sender or receiver are invalid");
+      throw new AppError("Sender and receiver cannot be the same", 400);
     }
 
     const tags = await tagRepository.findByIds(tag_ids);
 
     if (tags.length === 0 || tags.length !== tag_ids.length) {
-      throw new Error("Invalid tag(s)");
+      throw new AppError("Invalid tag(s)", 400);
     }
 
     const compliment = complimentRepository.create({

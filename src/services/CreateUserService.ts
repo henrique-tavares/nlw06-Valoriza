@@ -1,5 +1,6 @@
 import { hash } from "bcryptjs";
 import { getCustomRepository } from "typeorm";
+import { AppError } from "../entities/AppError";
 import { UserRepository } from "../repositories/UserRepository";
 
 interface IUserRequest {
@@ -14,7 +15,7 @@ export class CreateUserService {
     const userData = { name, email, password };
     for (let field in userData) {
       if (!userData[ field ]) {
-        throw new Error(`Field '${field}' is missing`);
+        throw new AppError(`Field '${field}' is missing`, 404);
       }
     }
 
@@ -25,7 +26,7 @@ export class CreateUserService {
     });
 
     if (alreadyExistentUser) {
-      throw new Error("User already exists");
+      throw new AppError("User already exists", 400);
     }
 
     const passwordHash = await hash(password, 8);

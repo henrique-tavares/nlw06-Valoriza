@@ -1,6 +1,7 @@
 import { compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import { getCustomRepository } from "typeorm";
+import { AppError } from "../entities/AppError";
 import { UserRepository } from "../repositories/UserRepository";
 
 interface IAuthRequest {
@@ -17,11 +18,11 @@ export class AuthenticateUserService {
     });
 
     if (!user || !password) {
-      throw new Error("Email or Password are incorrect");
+      throw new AppError("Email or Password are incorrect", 400);
     }
 
     if (!(await compare(password, user.password))) {
-      throw new Error("Email or Password are incorrect");
+      throw new AppError("Email or Password are incorrect", 400);
     }
 
     const token = sign(
